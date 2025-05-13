@@ -32,33 +32,39 @@ void initUniformParticles() {
         for (int col = 0; col < cols && index < particleCount; col++) {
             double x = start + col * horizontalStride;
             particles[index].position = glm::vec2(x, y);
-            particles[index].velocity = glm::vec2(static_cast<float>(rand()) / static_cast<float>(RAND_MAX), static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+            particles[index].velocity = glm::vec2(
+                (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2) - 1.0f,
+                (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2) - 1.0f
+                );
             particles[index].age = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
             index++;
         }
     }
 
-    // One VAO to describe structure
+    // Create SSBO for compute shader
+    glGenBuffers(1, &particlesVBO);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, particlesVBO);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, particleCount * sizeof(Particle), particles, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+    // VAO for rendering
     glGenVertexArrays(1, &particlesVAO);
     glBindVertexArray(particlesVAO);
 
-    // VBO with all particles
-    glGenBuffers(1, &particlesVBO);
+    // Bind the same buffer but as ARRAY_BUFFER for rendering
     glBindBuffer(GL_ARRAY_BUFFER, particlesVBO);
-    glBufferData(GL_ARRAY_BUFFER, particleCount * sizeof(Particle), particles, GL_STATIC_DRAW);
 
     // Position attribute (location = 0)
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, position));
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, position));
     glEnableVertexAttribArray(0);
 
     // Velocity attribute (location = 1)
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, velocity));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, velocity));
     glEnableVertexAttribArray(1);
 
     // Age attribute (location = 2)
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, age));
+    glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, age));
     glEnableVertexAttribArray(2);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }

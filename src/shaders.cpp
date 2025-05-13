@@ -7,7 +7,7 @@
 #include "../headers/base.h"
 using namespace std;
 
-GLuint particleProgram;
+GLuint particleProgram, computeProgram;
 
 bool ReadDataFromFile(
 	const string& fileName, ///< [in]  Name of the shader file
@@ -93,20 +93,66 @@ GLuint createFS(const char* shaderName)
     return fs;
 }
 
+GLuint createCS(const char* shaderName)
+{
+	const string csFolderName = "cs";
+	string shaderSource;
+
+	string filename(csFolderName + "/" +shaderName);
+	if (!ReadDataFromFile(filename, shaderSource))
+	{
+		cout << "Cannot find file name: " + filename << endl;
+		exit(-1);
+	}
+
+	GLint length = shaderSource.length();
+	const GLchar* shader = (const GLchar*)shaderSource.c_str();
+
+	GLuint cs = glCreateShader(GL_COMPUTE_SHADER);
+	glShaderSource(cs, 1, &shader, &length);
+	glCompileShader(cs);
+
+	char output[1024] = { 0 };
+	glGetShaderInfoLog(cs, 1024, &length, output);
+	printf("CS compile log: %s\n", output);
+
+	return cs;
+}
+
 void initShaders()
 {
+	// Create programs
 	particleProgram = glCreateProgram();
-	GLuint vs1 = createVS("vert.glsl");
-	GLuint fs1 = createFS("frag.glsl");
-	glAttachShader(particleProgram, vs1);
-	glAttachShader(particleProgram, fs1);
+	computeProgram = glCreateProgram();
+
+	// Load shaders
+	GLuint vs = createVS("vert.glsl");      // Vertex Shader
+	GLuint fs = createFS("frag.glsl");      // Fragment Shader
+	GLuint cs = createCS("particle.glsl");   // Compute Shader
+
+	// Attach vertex and fragment shaders to the particle program
+	glAttachShader(particleProgram, vs);
+	glAttachShader(particleProgram, fs);
+
+	// Attach compute shader to its own program
+	glAttachShader(computeProgram, cs);
+
+	// Link particle program (for rendering)
 	glLinkProgram(particleProgram);
 	GLint status;
 	glGetProgramiv(particleProgram, GL_LINK_STATUS, &status);
-
 	if (status != GL_TRUE)
 	{
-		cout << "Program link failed" << endl;
+		cout << "Particle Program link failed" << endl;
+		exit(-1);
+	}
+
+	// Link compute shader program
+	glLinkProgram(computeProgram);
+	glGetProgramiv(computeProgram, GL_LINK_STATUS, &status);
+	if (status != GL_TRUE)
+	{
+		cout << "Compute Program link failed" << endl;
 		exit(-1);
 	}
 }

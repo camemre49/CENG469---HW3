@@ -2,7 +2,7 @@
 #define SHADERS_H
 #include <GL/glew.h>
 
-extern GLuint particleProgram;
+extern GLuint particleProgram, computeProgram;
 
 void initShaders();
 

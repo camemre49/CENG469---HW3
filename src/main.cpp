@@ -38,6 +38,24 @@ int main(const int argc, const char *argv[]) {
 }
 
 void display() {
+    // Calculate delta time
+    static float lastTime = glfwGetTime();
+    float currentTime = glfwGetTime();
+    float deltaTime = currentTime - lastTime;
+    lastTime = currentTime;
+
+    // Update particles with compute shader
+    glUseProgram(computeProgram);
+    glUniform1f(glGetUniformLocation(computeProgram, "deltaTime"), deltaTime);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, particlesVBO);
+    glDispatchCompute((particleCount + 127) / 128, 1, 1); // 128 particles per work group
+
+    // Add memory barrier to ensure compute shader finishes before rendering
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
+
+    // Clear screen
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     drawParticles();
 }
 
