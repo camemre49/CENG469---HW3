@@ -1,7 +1,7 @@
 #include <iostream>
-#include "../headers/points.h"
+#include "../headers/particle.h"
 #include "../headers/window.h"
-#include "../headers/points.h"
+#include "../headers/particle.h"
 #include "../headers/shaders.h"
 
 void display();
@@ -25,28 +25,27 @@ int main(const int argc, const char *argv[]) {
     initWindow();
     setCallbacks();
     initShaders();
-    initUniformPoints();
-
+    initUniformParticles();
 
     mainLoop();
 
     return 0;
 }
 
-void drawPoints();
+void drawParticles();
 void display() {
-    drawPoints();
+    drawParticles();
 }
 
-void drawPoints() {
+void drawParticles() {
     glClearColor(0, 0, 0 , 1);
     glClearDepth(1.0f);
     glClearStencil(0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glUseProgram(pointProgram);
-    glBindVertexArray(pointsVAO);
+    glUseProgram(particleProgram);
+    glBindVertexArray(particlesVAO);
 
     glPointSize(static_cast<float>(particleSize));
     glDrawArrays(GL_POINTS, 0, particleCount);

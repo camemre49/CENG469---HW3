@@ -7,7 +7,7 @@
 #include "../headers/base.h"
 using namespace std;
 
-GLuint pointProgram;
+GLuint particleProgram;
 
 bool ReadDataFromFile(
 	const string& fileName, ///< [in]  Name of the shader file
@@ -95,14 +95,14 @@ GLuint createFS(const char* shaderName)
 
 void initShaders()
 {
-	pointProgram = glCreateProgram();
+	particleProgram = glCreateProgram();
 	GLuint vs1 = createVS("vert.glsl");
 	GLuint fs1 = createFS("frag.glsl");
-	glAttachShader(pointProgram, vs1);
-	glAttachShader(pointProgram, fs1);
-	glLinkProgram(pointProgram);
+	glAttachShader(particleProgram, vs1);
+	glAttachShader(particleProgram, fs1);
+	glLinkProgram(particleProgram);
 	GLint status;
-	glGetProgramiv(pointProgram, GL_LINK_STATUS, &status);
+	glGetProgramiv(particleProgram, GL_LINK_STATUS, &status);
 
 	if (status != GL_TRUE)
 	{

@@ -7,13 +7,13 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 
 add_executable(hw3 src/main.cpp
-        headers/points.h
+        headers/particle.h
         headers/window.h
         headers/base.h
         src/window.handler.cpp
         src/callbacks.cpp
         headers/callbacks.h
-        src/points.cpp
+        src/particle.cpp
         src/shaders.cpp
         headers/shaders.h)
 
