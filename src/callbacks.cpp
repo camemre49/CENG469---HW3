@@ -1,4 +1,4 @@
-#include "../headers/callback-handler.h"
+#include "../headers/callbacks.h"
 void keyboard(GLFWwindow* window, int key, int scancode, int action, int mods);
 void setCallbacks() {
     glfwSetKeyCallback(window, keyboard);

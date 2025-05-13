@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../headers/window-handler.h"
+#include "../headers/window.h"
 
 GLFWwindow* window = nullptr;
 int windowHeight = 1080;

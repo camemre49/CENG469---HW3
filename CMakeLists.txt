@@ -7,12 +7,15 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 
 add_executable(hw3 src/main.cpp
-        headers/simulation-args.h
-        headers/window-handler.h
+        headers/points.h
+        headers/window.h
         headers/base.h
         src/window.handler.cpp
-        src/callback-handler.cpp
-        headers/callback-handler.h)
+        src/callbacks.cpp
+        headers/callbacks.h
+        src/points.cpp
+        src/shaders.cpp
+        headers/shaders.h)
 
 # Link OpenGL, GLEW, and GLFW to the target executable
 target_link_libraries(hw3 OpenGL::GL GLEW::GLEW glfw)
