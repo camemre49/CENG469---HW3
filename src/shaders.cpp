@@ -5,6 +5,7 @@
 #include <string>
 
 #include "../headers/base.h"
+#include "../headers/particle.h"
 using namespace std;
 
 GLuint particleProgram, computeProgram;
@@ -155,4 +156,14 @@ void initShaders()
 		cout << "Compute Program link failed" << endl;
 		exit(-1);
 	}
+
+
+	glUseProgram(computeProgram);
+	glm::vec3 attractorPoints[] = {
+		{  0.2f,  0.2f,  8000.0f },  // top right
+		{ -0.2f,  0.2f,  8000.0f },  // top left
+		{ 0.0f, -0.8f,  10000.0f },  // bottom left
+		{  -0.0f, -0.8f,  10000.0f },  // bottom right
+	};
+	glUniform3fv(glGetUniformLocation(computeProgram, "attractors"), currentNumOfAttractors, glm::value_ptr(attractorPoints[0]));
 }

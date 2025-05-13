@@ -12,4 +12,6 @@
 #include <glm/gtx/quaternion.hpp>
 
 
+extern bool shouldDisplay;
+
 #endif //BASE_H

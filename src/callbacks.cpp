@@ -11,6 +11,10 @@ void keyboard(GLFWwindow* window, int key, int scancode, int action, int mods) {
 			case GLFW_KEY_Q:
 				glfwSetWindowShouldClose(window, GLFW_TRUE);
 				break;
+
+			case GLFW_KEY_R:
+				shouldDisplay = true;
+				break;
 			default: ;
 		}
 	}

@@ -8,6 +8,8 @@ void display();
 void drawParticles();
 void cleanup();
 
+bool shouldDisplay = true;
+
 
 void mainLoop()
 {
@@ -15,7 +17,9 @@ void mainLoop()
     glBlendFunc(GL_ONE, GL_ONE);
     while (!glfwWindowShouldClose(window))
     {
-        display();
+        if (shouldDisplay) {
+            display();
+        }
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -49,6 +53,12 @@ void display() {
     // Update particles with compute shader
     glUseProgram(computeProgram);
     glUniform1f(glGetUniformLocation(computeProgram, "deltaTime"), deltaTime);
+    glUniform1f(glGetUniformLocation(computeProgram, "positionMultiplier"), (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)));
+    glUniform2f(glGetUniformLocation(computeProgram, "randomOrigin"),
+        (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 - 1),
+        (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 - 1)
+        );
+    glUniform1i(glGetUniformLocation(computeProgram, "currentNumOfAttractors"), currentNumOfAttractors);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, particlesVBO);
     glDispatchCompute((particleCount + 127) / 128, 1, 1); // 128 particles per work group
 

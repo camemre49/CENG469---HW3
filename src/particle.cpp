@@ -5,8 +5,9 @@
 
 int particleCount = -1;
 int particleSize = -1;
-GLuint particlesVBO, particlesVAO;
 Particle* particles;
+GLuint particlesVBO, particlesVAO;
+int currentNumOfAttractors = 4;
 
 void initUniformParticles() {
     if (particleCount <= 0) return;
