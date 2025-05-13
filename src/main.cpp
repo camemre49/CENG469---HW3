@@ -5,6 +5,10 @@
 #include "../headers/shaders.h"
 
 void display();
+void drawParticles();
+void cleanup();
+
+
 void mainLoop()
 {
     while (!glfwWindowShouldClose(window))
@@ -29,10 +33,10 @@ int main(const int argc, const char *argv[]) {
 
     mainLoop();
 
+    cleanup();
     return 0;
 }
 
-void drawParticles();
 void display() {
     drawParticles();
 }
@@ -51,4 +55,10 @@ void drawParticles() {
     glDrawArrays(GL_POINTS, 0, particleCount);
 
     glBindVertexArray(0);
+}
+
+void cleanup() {
+    glDeleteVertexArrays(1, &particlesVAO);
+    glDeleteBuffers(1, &particlesVBO);
+    delete[] particles;
 }
