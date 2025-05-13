@@ -1,7 +1,7 @@
 #version 430 core
 
 struct Particle {
-    vec2 position;
+    vec4 position;
     vec2 velocity;
     float age;
 };
@@ -21,7 +21,9 @@ void main() {
     if (idx >= particles.length()) return;
 
     // Update position
-    particles[idx].position += particles[idx].velocity * deltaTime * 0.1;
+    vec2 vel = particles[idx].velocity * deltaTime * 0.5;
+    particles[idx].position.x += vel.x;
+    particles[idx].position.y += vel.y;
 
     // Simple boundary checking
     if (particles[idx].position.x < boundsMin.x || particles[idx].position.x > boundsMax.x) {
@@ -32,8 +34,12 @@ void main() {
     }
 
     // Update age
-    particles[idx].age = particles[idx].age - 0.003;
+    particles[idx].age = particles[idx].age - 0.01;
     if(particles[idx].age < 0) {
+        particles[idx].position.x = particles[idx].position.z;
+        particles[idx].position.y = particles[idx].position.w;
+        particles[idx].position.z *= 0.8;
+        particles[idx].position.w *= 0.8;
         particles[idx].age = 1.0f;
     }
 }

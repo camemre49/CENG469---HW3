@@ -7,7 +7,7 @@ extern int particleSize;
 extern GLuint particlesVBO, particlesVAO;
 
 struct Particle {
-    glm::vec2 position;
+    glm::vec4 position;
     glm::vec2 velocity;
     float age;
     float _pad1;     // 4 bytes to align struct size to 24 bytes

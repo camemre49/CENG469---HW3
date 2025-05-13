@@ -31,7 +31,7 @@ void initUniformParticles() {
         double y = start + row * verticalStride;
         for (int col = 0; col < cols && index < particleCount; col++) {
             double x = start + col * horizontalStride;
-            particles[index].position = glm::vec2(x, y);
+            particles[index].position = glm::vec4(x, y, x, y);
             particles[index].velocity = glm::vec2(
                 (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2) - 1.0f,
                 (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2) - 1.0f
@@ -55,7 +55,7 @@ void initUniformParticles() {
     glBindBuffer(GL_ARRAY_BUFFER, particlesVBO);
 
     // Position attribute (location = 0)
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, position));
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, position));
     glEnableVertexAttribArray(0);
 
     // Velocity attribute (location = 1)

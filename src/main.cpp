@@ -11,6 +11,8 @@ void cleanup();
 
 void mainLoop()
 {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE);
     while (!glfwWindowShouldClose(window))
     {
         display();
