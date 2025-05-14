@@ -48,14 +48,14 @@ void main() {
     }
 
     // Update age
-    particles[idx].age -= 0.0001 * deltaTime * 2.5f;
+    particles[idx].age -= 0.001 * deltaTime;
     if(particles[idx].age < 0) {
         // Uniform
-        particles[idx].position.x = particles[idx].position.z;
-        particles[idx].position.y = particles[idx].position.w;
+        //particles[idx].position.x = particles[idx].position.z;
+        //particles[idx].position.y = particles[idx].position.w;
 
         // Random origin
-        //particles[idx].position.xy = randomOrigin.xy;
+        particles[idx].position.xy = randomOrigin.xy;
         particles[idx].age = 1.0f;
     }
 }

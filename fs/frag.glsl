@@ -5,8 +5,8 @@ out vec4 FragColor;
 
 void main() {
 	FragColor = mix(
-		vec4(0.0, 0.2, 1.0, 1.0),
-		vec4(0.2, 0.05, 0.3, 1.0),
-		fsAge
+		vec4(0.1, 0.0, 0.0, 0.1),   // dark red
+		vec4(1.0, 0.2, 0.0, 1.0),   // bright orange
+		pow(fsAge, 2.0)
 	);
 }

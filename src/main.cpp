@@ -50,14 +50,26 @@ void display() {
     float deltaTime = currentTime - lastTime;
     lastTime = currentTime;
 
+    // Static variables to store randomOrigin and control its update rate
+    static float originUpdateInterval = 3.0f; // seconds
+    static float timeSinceOriginUpdate = 0.0f;
+    static float randomOriginX = 0.0f;
+    static float randomOriginY = 0.0f;
+    static float randomOriginMultiplier = 0.8f;
+    // Accumulate time
+    timeSinceOriginUpdate += deltaTime;
+    if (timeSinceOriginUpdate >= originUpdateInterval) {
+        // Update origin only once per interval
+        randomOriginX = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * randomOriginMultiplier - randomOriginMultiplier/2;
+        randomOriginY = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * randomOriginMultiplier - randomOriginMultiplier/2;
+        timeSinceOriginUpdate = 0.0f;
+    }
+
     // Update particles with compute shader
     glUseProgram(computeProgram);
     glUniform1f(glGetUniformLocation(computeProgram, "deltaTime"), deltaTime);
     glUniform1f(glGetUniformLocation(computeProgram, "positionMultiplier"), (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)));
-    glUniform2f(glGetUniformLocation(computeProgram, "randomOrigin"),
-        (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 - 1),
-        (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2 - 1)
-        );
+    glUniform2f(glGetUniformLocation(computeProgram, "randomOrigin"),randomOriginX, randomOriginY);
     glUniform1i(glGetUniformLocation(computeProgram, "currentNumOfAttractors"), currentNumOfAttractors);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, particlesVBO);
     glDispatchCompute((particleCount + 127) / 128, 1, 1); // 128 particles per work group
