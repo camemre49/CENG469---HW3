@@ -10,7 +10,7 @@ add_executable(hw3 src/main.cpp
         headers/particle.h
         headers/window.h
         headers/base.h
-        src/window.handler.cpp
+        src/window.cpp
         src/callbacks.cpp
         headers/callbacks.h
         src/particle.cpp

@@ -5,6 +5,7 @@
 extern GLFWwindow* window;
 extern int windowHeight;
 extern int windowWidth;
+extern int windowPosX, windowPosY;
 
 void initWindow();
 void setCallbacks();

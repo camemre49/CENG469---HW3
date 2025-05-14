@@ -7,8 +7,19 @@ int particleCount = -1;
 int particleSize = -1;
 Particle* particles;
 GLuint particlesVBO, particlesVAO;
-int currentNumOfAttractors = 4;
-float deltaTimeMultiplier = 0.6f;
+
+// Attractors
+std::vector<glm::vec3> attractorPoints = {
+    {  0.4f, 0.4f,   50.0f },
+    { -0.4f, 0.4f,   50.0f },
+    {  0.0f, -0.4f,  100.0f },
+    {  0.0f, -0.6f,  100.0f },
+};
+int currentNumOfAttractors = attractorPoints.size();
+float attractorMass = 50.0f;
+
+
+float deltaTimeMultiplier = 1.5f;
 
 void initUniformParticles() {
     if (particleCount <= 0) return;

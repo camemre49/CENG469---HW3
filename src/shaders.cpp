@@ -159,11 +159,5 @@ void initShaders()
 
 
 	glUseProgram(computeProgram);
-	glm::vec3 attractorPoints[] = {
-		{  0.4f,  0.4f,  400.0f },  // top right
-		{ -0.4f,  0.4f,  400.0f },  // top left
-		{ 0.0f, -0.4f,  800.0f },  // bottom middle
-		{  -0.0f, -0.4f,  800.0f },  // bottom middle
-	};
 	glUniform3fv(glGetUniformLocation(computeProgram, "attractors"), currentNumOfAttractors, glm::value_ptr(attractorPoints[0]));
 }

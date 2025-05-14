@@ -2,8 +2,10 @@
 #include "../headers/window.h"
 
 GLFWwindow* window = nullptr;
-int windowHeight = 1080;
-int windowWidth = 1920;
+int windowHeight = 360;
+int windowWidth = 640;
+int windowPosX = 0;
+int windowPosY = 0;
 
 void initWindow() {
     if (!glfwInit()) {

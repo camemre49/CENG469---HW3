@@ -1,11 +1,14 @@
 #ifndef SIMULATION_ARGS_H
 #define SIMULATION_ARGS_H
+#include <vector>
+
 #include "base.h"
 
 extern int particleCount;
 extern int particleSize;
 extern GLuint particlesVBO, particlesVAO;
 extern int currentNumOfAttractors;
+extern std::vector<glm::vec3> attractorPoints;
 extern float deltaTimeMultiplier;
 
 struct Particle {

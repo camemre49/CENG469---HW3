@@ -13,5 +13,6 @@
 
 
 extern bool shouldDisplay;
+extern float attractorMass;
 
 #endif //BASE_H

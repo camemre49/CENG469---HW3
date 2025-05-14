@@ -10,7 +10,6 @@ void cleanup();
 
 bool shouldDisplay = true;
 
-
 void mainLoop()
 {
     glEnable(GL_BLEND);
@@ -72,6 +71,7 @@ void display() {
        glUniform1f(glGetUniformLocation(computeProgram, "positionMultiplier"), (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)));
        glUniform2f(glGetUniformLocation(computeProgram, "randomOrigin"),randomOriginX, randomOriginY);
        glUniform1i(glGetUniformLocation(computeProgram, "currentNumOfAttractors"), currentNumOfAttractors);
+       glUniform1f(glGetUniformLocation(computeProgram, "attractorMass"), attractorMass);
        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, particlesVBO);
        glDispatchCompute((particleCount + 127) / 128, 1, 1); // 128 particles per work group
 
