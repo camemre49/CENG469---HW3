@@ -17,10 +17,10 @@ void mainLoop()
     glBlendFunc(GL_ONE, GL_ONE);
     while (!glfwWindowShouldClose(window))
     {
+        display();
         if (shouldDisplay) {
-            display();
+            glfwSwapBuffers(window);
         }
-        glfwSwapBuffers(window);
         glfwPollEvents();
     }
 }
@@ -51,7 +51,7 @@ void display() {
     lastTime = currentTime;
 
     // Static variables to store randomOrigin and control its update rate
-    static float originUpdateInterval = 3.0f; // seconds
+    static float originUpdateInterval = 10.0f; // seconds
     static float timeSinceOriginUpdate = 0.0f;
     static float randomOriginX = 0.0f;
     static float randomOriginY = 0.0f;
@@ -65,22 +65,24 @@ void display() {
         timeSinceOriginUpdate = 0.0f;
     }
 
-    // Update particles with compute shader
-    glUseProgram(computeProgram);
-    glUniform1f(glGetUniformLocation(computeProgram, "deltaTime"), deltaTime);
-    glUniform1f(glGetUniformLocation(computeProgram, "positionMultiplier"), (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)));
-    glUniform2f(glGetUniformLocation(computeProgram, "randomOrigin"),randomOriginX, randomOriginY);
-    glUniform1i(glGetUniformLocation(computeProgram, "currentNumOfAttractors"), currentNumOfAttractors);
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, particlesVBO);
-    glDispatchCompute((particleCount + 127) / 128, 1, 1); // 128 particles per work group
+   if (shouldDisplay) {
+       // Update particles with compute shader
+       glUseProgram(computeProgram);
+       glUniform1f(glGetUniformLocation(computeProgram, "deltaTime"), deltaTime * deltaTimeMultiplier);
+       glUniform1f(glGetUniformLocation(computeProgram, "positionMultiplier"), (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)));
+       glUniform2f(glGetUniformLocation(computeProgram, "randomOrigin"),randomOriginX, randomOriginY);
+       glUniform1i(glGetUniformLocation(computeProgram, "currentNumOfAttractors"), currentNumOfAttractors);
+       glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, particlesVBO);
+       glDispatchCompute((particleCount + 127) / 128, 1, 1); // 128 particles per work group
 
-    // Add memory barrier to ensure compute shader finishes before rendering
-    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
+       // Add memory barrier to ensure compute shader finishes before rendering
+       glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT | GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
 
-    // Clear screen
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+       // Clear screen
+       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    drawParticles();
+       drawParticles();
+   }
 }
 
 void drawParticles() {

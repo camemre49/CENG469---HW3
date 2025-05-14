@@ -8,6 +8,7 @@ int particleSize = -1;
 Particle* particles;
 GLuint particlesVBO, particlesVAO;
 int currentNumOfAttractors = 4;
+float deltaTimeMultiplier = 0.6f;
 
 void initUniformParticles() {
     if (particleCount <= 0) return;

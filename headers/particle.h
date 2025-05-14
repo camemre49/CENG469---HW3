@@ -6,6 +6,7 @@ extern int particleCount;
 extern int particleSize;
 extern GLuint particlesVBO, particlesVAO;
 extern int currentNumOfAttractors;
+extern float deltaTimeMultiplier;
 
 struct Particle {
     glm::vec4 position;
