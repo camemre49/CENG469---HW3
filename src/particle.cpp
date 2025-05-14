@@ -27,6 +27,7 @@ void initUniformParticles() {
     double verticalStride = usableSpace / (rows - 1);
 
     int index = 0;
+    double velocityMultiplier = 0.01;
     srand(time(NULL));
     for (int row = 0; row < rows && index < particleCount; row++) {
         double y = start + row * verticalStride;
@@ -34,8 +35,8 @@ void initUniformParticles() {
             double x = start + col * horizontalStride;
             particles[index].position = glm::vec4(x, y, x, y);
             particles[index].velocity = glm::vec2(
-                (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2) - 1.0f,
-                (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 2) - 1.0f
+                (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * velocityMultiplier) - velocityMultiplier/2,
+                (static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * velocityMultiplier) - velocityMultiplier/2
                 );
             particles[index].age = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
             index++;

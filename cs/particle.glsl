@@ -50,12 +50,12 @@ void main() {
     // Update age
     particles[idx].age -= 0.0001 * deltaTime * 2.5f;
     if(particles[idx].age < 0) {
-        // Random multiplier
-        //particles[idx].position.x = particles[idx].position.z;
-        //particles[idx].position.y = particles[idx].position.w;
+        // Uniform
+        particles[idx].position.x = particles[idx].position.z;
+        particles[idx].position.y = particles[idx].position.w;
 
         // Random origin
-        particles[idx].position.xy = randomOrigin.xy;
+        //particles[idx].position.xy = randomOrigin.xy;
         particles[idx].age = 1.0f;
     }
 }
