@@ -21,8 +21,8 @@ uniform vec3 attractors[12]; // Maximum number of attractors is 100 for now
 
 // Reinitialize parameters
 uniform float positionMultiplier = 0.8;
-uniform vec2 randomOrigin;
-float attractorFactor = 0.5;
+uniform vec2 origin;
+float attractorFactor = 0.9;
 
 layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
 
@@ -35,12 +35,13 @@ void main() {
     particles[idx].position.xy += vel * deltaTime;
 
     for(int i = 0; i < currentNumOfAttractors; i++) {
-        vec2 dist = (attractors[i].xy - particles[idx].position.xy) * 2;
+        vec2 dist = (attractors[i].xy - particles[idx].position.xy);
         vel += deltaTime * deltaTime * attractors[i].z * normalize(dist) / (dot(dist, dist) + 10.0);
     }
-    if (length(vel) > attractorFactor) {
+    if (length(vel) > attractorFactor && currentNumOfAttractors > 0) {
         vel = normalize(vel) * attractorFactor;
     }
+    vel = vel * (1 - (deltaTime * deltaTime) * 3);
     particles[idx].velocity.xy = vel;
 
     // Simple boundary checking
@@ -59,7 +60,7 @@ void main() {
         //particles[idx].position.y = particles[idx].position.w;
 
         // Random origin
-        particles[idx].position.xy = randomOrigin.xy;
+        particles[idx].position.xy = origin.xy + particles[idx].position.xy * 0.01;
         particles[idx].age = 1.0f;
     }
 }

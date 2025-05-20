@@ -8,7 +8,7 @@
 #include "../headers/particle.h"
 using namespace std;
 
-GLuint particleProgram, computeProgram;
+GLuint particleProgram, computeProgram, textProgram;
 
 bool ReadDataFromFile(
 	const string& fileName, ///< [in]  Name of the shader file
@@ -125,11 +125,16 @@ void initShaders()
 	// Create programs
 	particleProgram = glCreateProgram();
 	computeProgram = glCreateProgram();
+	textProgram = glCreateProgram();
 
 	// Load shaders
 	GLuint vs = createVS("vert.glsl");      // Vertex Shader
 	GLuint fs = createFS("frag.glsl");      // Fragment Shader
 	GLuint cs = createCS("particle.glsl");   // Compute Shader
+
+	// For texts
+	GLuint textVs = createVS("vert_text.glsl");
+	GLuint textFs = createFS("frag_text.glsl");
 
 	// Attach vertex and fragment shaders to the particle program
 	glAttachShader(particleProgram, vs);
@@ -137,6 +142,10 @@ void initShaders()
 
 	// Attach compute shader to its own program
 	glAttachShader(computeProgram, cs);
+
+	// Attach vertex and fragment shaders to text program
+	glAttachShader(textProgram, textVs);
+	glAttachShader(textProgram, textFs);
 
 	// Link particle program (for rendering)
 	glLinkProgram(particleProgram);
@@ -154,6 +163,15 @@ void initShaders()
 	if (status != GL_TRUE)
 	{
 		cout << "Compute Program link failed" << endl;
+		exit(-1);
+	}
+
+	glLinkProgram(textProgram);
+	glGetProgramiv(textProgram, GL_LINK_STATUS, &status);
+
+	if (status != GL_TRUE)
+	{
+		cout << "Program link failed" << endl;
 		exit(-1);
 	}
 

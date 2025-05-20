@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
+find_package(Freetype REQUIRED)
 
 add_executable(hw3 src/main.cpp
         headers/particle.h
@@ -15,7 +16,9 @@ add_executable(hw3 src/main.cpp
         headers/callbacks.h
         src/particle.cpp
         src/shaders.cpp
-        headers/shaders.h)
+        headers/shaders.h
+        src/text.cpp
+        headers/text.h)
 
 # Link OpenGL, GLEW, and GLFW to the target executable
-target_link_libraries(hw3 OpenGL::GL GLEW::GLEW glfw)
+target_link_libraries(hw3 OpenGL::GL GLEW::GLEW glfw Freetype::Freetype)

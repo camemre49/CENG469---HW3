@@ -17,6 +17,8 @@ std::vector<glm::vec3> attractorPoints = {
 };
 int currentNumOfAttractors = attractorPoints.size();
 float attractorMass = 50.0f;
+glm::vec2 originPosition = glm::vec2(-1.0f, -1.0f);
+ClickMode currentClickMode = ATTRACTOR;
 
 
 float deltaTimeMultiplier = 1.5f;

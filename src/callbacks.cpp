@@ -28,6 +28,12 @@ void keyboard(GLFWwindow* window, int key, int scancode, int action, int mods) {
 			case GLFW_KEY_R:
 				shouldDisplay = !shouldDisplay;
 				break;
+			case GLFW_KEY_T:
+				shouldDisplayTexts = !shouldDisplayTexts;
+				break;
+			case GLFW_KEY_G:
+				currentClickMode = currentClickMode == ATTRACTOR ? ORIGIN : ATTRACTOR;
+				break;
 			case GLFW_KEY_F:
 				static bool isFullScreen = false;
 				if (!isFullScreen) {
@@ -70,7 +76,6 @@ constexpr float scrollThreshold = 2.0f;
 void mouseScroll(GLFWwindow* window, double xoffset, double yoffset) {
 	static double accumulatedScroll = 0.0;
 	accumulatedScroll += yoffset;
-	std::cout << accumulatedScroll << std::endl;
 	if (accumulatedScroll >= scrollThreshold) {
 		if (attractorMass < 100.0f) {
 			attractorMass += 10.0f;
@@ -78,7 +83,7 @@ void mouseScroll(GLFWwindow* window, double xoffset, double yoffset) {
 		accumulatedScroll -= scrollThreshold;
 	}
 	else if (accumulatedScroll <= -scrollThreshold) {
-		if (attractorMass > 0.0f) {
+		if (attractorMass > 10.0f) {
 			attractorMass -= 10.0f;
 		}
 		accumulatedScroll += scrollThreshold;
@@ -97,9 +102,14 @@ void mouseButton(GLFWwindow* window, int button, int action, int mods) {
 		float yNDC = 1.0f - (2.0f * ypos) / height;
 
 		if (button == GLFW_MOUSE_BUTTON_LEFT) {
-			if (currentNumOfAttractors < 12) {
-				attractorPoints.push_back(glm::vec3(xNDC, yNDC, attractorMass));
-				currentNumOfAttractors++;
+			if (currentClickMode == ATTRACTOR) {
+				if (currentNumOfAttractors < 12) {
+					attractorPoints.push_back(glm::vec3(xNDC, yNDC, attractorMass));
+					currentNumOfAttractors++;
+				}
+			}
+			else if (currentClickMode == ORIGIN) {
+				originPosition = glm::vec2(xNDC, yNDC);
 			}
 		}
 		else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
@@ -108,9 +118,6 @@ void mouseButton(GLFWwindow* window, int button, int action, int mods) {
 				currentNumOfAttractors--;
 			}
 		}
-
-		std::cout << currentNumOfAttractors << std::endl;
-		std::cout << attractorMass << std::endl;
 
 		// Update uniform
 		glUseProgram(computeProgram);
